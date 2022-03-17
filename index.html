@@ -1,1 +1,81 @@
-<html>Test</html>
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=0.5,user-scalable=no"
+    />
+    <link rel="stylesheet" href="pico-bootstrap-grid.min.css" />
+    <title>导航</title>
+    <style>
+      .tu {
+        background-size: 100%;
+        pointer-events: none;
+        padding-top: 100%;
+        border-radius: 5%;
+        background-color: rgb(0, 86, 185);
+      }
+      .title {
+        font-size: x-small;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 3px 0 5px;
+      }
+      .row {
+        margin-top: calc(var(--typography-spacing-vertical) * -2);
+        margin-bottom: calc(var(--typography-spacing-vertical) * -2);
+      }
+      .col {
+        padding-right: calc(var(--bs-gutter-x) * 0.3) !important;
+        padding-left: calc(var(--bs-gutter-x) * 0.3) !important;
+      }
+    </style>
+    <script>
+      function loadXMLDoc() {
+        var xmlhttp;
+        var txt, x, i;
+        if (window.XMLHttpRequest) {
+          // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+          xmlhttp = new XMLHttpRequest();
+        } else {
+          // IE6, IE5 浏览器执行代码
+          xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            console.log(xmlhttp.readyState);
+            xmlDoc = xmlhttp.responseXML;
+            txt = "";
+            x = xmlDoc.getElementsByTagName("title");
+            console.log(x);
+            for (i = 0; i < x.length; i++) {
+              y = xmlDoc
+                .getElementsByTagName("bookmark")
+                [i].getAttribute("href");
+              txt =
+                txt +
+                '<div class="col col-1" onclick="window.open(\'' +
+                y +
+                '\',\'_self\')"><div class="tu" style="background-image: url(\'0.png\')"></div><div class="title">' +
+                x[i].childNodes[0].nodeValue +
+                "</div></div>";
+            }
+            document.getElementById("myDiv").innerHTML = txt;
+          } else {
+            console.log(xmlhttp.status);
+          }
+        };
+        xmlhttp.open("GET", "https://192.168.153.222/l/bookmarks.xml", true);
+        xmlhttp.send();
+      }
+    </script>
+  </head>
+  <body onload="loadXMLDoc()">
+    <main class="container-fluid">
+      <div id="myDiv" class="row"></div>
+    </main>
+  </body>
+</html>
